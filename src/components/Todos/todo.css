@@ -14,7 +14,7 @@ body {
     position: absolute;
     top: 20%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -20%);
 }
 .input-area {
     width: 100%;
@@ -43,6 +43,7 @@ ul {
     align-items: center;
     margin-bottom: 0.2em;
     font-size: 20px;
+    background-color: #ab9c9c;
  }
  ul li i {
     cursor: pointer;
