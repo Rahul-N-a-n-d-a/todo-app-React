@@ -44,4 +44,5 @@ ul {
  ul li i {
     cursor: pointer;
     margin-right: 0.2em;
+    font-size: 15px;
  }
