@@ -8,10 +8,14 @@ function Todo() {
   const [completedTodos, setCompletedTodos] = useState([])
   const handleAddTodo = () => {
     if (task === '') {
-      alert('No todos entered')
+      alert('No todos entered');
     } else {
-      setTodos([...todos, { id: Date.now(), task: task }])
-      setTask('')
+      setTodos(prevTodos => {
+        const newTodos = [...prevTodos, { id: Date.now(), task: task }];
+        localStorage.setItem('activeTodos', JSON.stringify(newTodos));
+        return newTodos;
+      })
+      setTask('');
     }
   }
   const handleShowTodos = () => {
@@ -20,11 +24,23 @@ function Todo() {
         {todos.map((item, index) => {
           return (
             <li className='p-1' key={index}>{item.task} <i onClick={() => {
-              setCompletedTodos([...completedTodos, item])
-              setTodos(todos.filter(value => value.id !== item.id))
+              setCompletedTodos(prevCompletedTodos => {
+                const newCompletedTodos = [...prevCompletedTodos, item];
+                localStorage.setItem('completedTodos', JSON.stringify(newCompletedTodos));
+                return newCompletedTodos;
+              })
+              setTodos(prevTodos => {
+                const filteredTodos = prevTodos.filter(value => value.id !== item.id);
+                localStorage.setItem('activeTodos', JSON.stringify(filteredTodos));
+                return filteredTodos;
+              })
             }} className="fa-solid fa-check ms-auto me-3"></i>
               <i onClick={() => {
-                setTodos(todos.filter(value => value.id !== item.id))
+                setTodos(prevTodos => {
+                  const filteredTodos = prevTodos.filter(value => value.id !== item.id);
+                  localStorage.setItem('activeTodos', JSON.stringify(filteredTodos));
+                  return filteredTodos;
+                })
               }} className="fa-solid fa-trash"></i></li>
           )
         })
@@ -38,7 +54,11 @@ function Todo() {
         {completedTodos.map((item, index) => {
           return (
             <li className='p-1' key={index}>{item.task} <i onClick={() => {
-              setCompletedTodos(completedTodos.filter(value => value.id !== item.id))
+              setCompletedTodos(prevCompletedTodos => {
+                const filteredCompletedTodos = prevCompletedTodos.filter(value => value.id !== item.id);
+                localStorage.setItem('completedTodos', JSON.stringify(filteredCompletedTodos));
+                return filteredCompletedTodos;
+              })
             }} className="fa-solid fa-trash"></i></li>
           )
         })
@@ -48,8 +68,15 @@ function Todo() {
   }
   useEffect(() => {
     setCompleted(false)
+    let savedTodos = JSON.parse(localStorage.getItem('activeTodos'))
+    if (savedTodos) {
+      setTodos([...savedTodos])
+    }
+    let savedCompletedTodos = JSON.parse(localStorage.getItem('completedTodos'))
+    if (savedCompletedTodos)
+      setCompletedTodos([...savedCompletedTodos])
   }, [])
-  
+
 
   return (
     <div className='todo-container col-md-6'>
@@ -60,8 +87,8 @@ function Todo() {
       </div>
       <section className='show-todos'>
         <div className="todo-btns">
-          <button className={`show-todo-btn ${completed === false ? 'btn-clicked' : ''}`} onClick={() => {setCompleted(false);handleShowTodos()}}>Active Todos</button>
-          <button className={`show-todo-btn ${completed === true ? 'btn-clicked' : ''}`} onClick={() => {setCompleted(true); showCompletedTodos()}}>Completed Todos</button>
+          <button className={`show-todo-btn ${completed === false ? 'btn-clicked' : ''}`} onClick={() => { setCompleted(false); handleShowTodos() }}>Active Todos</button>
+          <button className={`show-todo-btn ${completed === true ? 'btn-clicked' : ''}`} onClick={() => { setCompleted(true); showCompletedTodos() }}>Completed Todos</button>
         </div>
         <div className="display-todos">
           {completed ? showCompletedTodos() : handleShowTodos()}
