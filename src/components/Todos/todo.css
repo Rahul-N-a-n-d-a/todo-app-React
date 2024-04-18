@@ -39,7 +39,7 @@ ul {
 ul li {
     list-style-type: none;
     display: flex;
-    /* justify-content: space-between; */
+    justify-content: space-between;
     align-items: center;
     margin-bottom: 0.4em;
     font-size: 20px;
@@ -64,11 +64,14 @@ ul li i {
     border: 1px solid black;
     background-color: transparent;
 }
+.show-todo-btn.btn-clicked {
+    background-color: #9d7272;
+    border: 2px solid green;
+}
 .show-todo-btn:hover {
     border-color: black;
     background-color: #dbcbcb;
 }
 .show-todo-btn:focus {
-    background-color: #9d7272;
-    border: 2px solid green;
+    
 }

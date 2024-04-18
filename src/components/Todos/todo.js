@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './todo.css'
 
 function Todo() {
@@ -35,19 +35,21 @@ function Todo() {
   const showCompletedTodos = () => {
     return (
       <ul>
-        {completedTodos.map((index, item) => {
+        {completedTodos.map((item, index) => {
           return (
-            setCompleted(true),
-            <li key={index}>{item.task} <i onClick={() => {
+            <li className='p-1' key={index}>{item.task} <i onClick={() => {
               setCompletedTodos(completedTodos.filter(value => value.id !== item.id))
-            }} class="fa-solid fa-trash"></i></li>
+            }} className="fa-solid fa-trash"></i></li>
           )
         })
         }
-        <li></li>
       </ul>
     )
   }
+  useEffect(() => {
+    setCompleted(false)
+  }, [])
+  
 
   return (
     <div className='todo-container col-md-6'>
@@ -58,12 +60,11 @@ function Todo() {
       </div>
       <section className='show-todos'>
         <div className="todo-btns">
-          <button className='show-todo-btn' onClick={() => handleShowTodos()}>Active Todos</button>
-          <button className='show-todo-btn' onClick={() => showCompletedTodos()}>Completed Todos</button>
+          <button className={`show-todo-btn ${completed === false ? 'btn-clicked' : ''}`} onClick={() => {setCompleted(false);handleShowTodos()}}>Active Todos</button>
+          <button className={`show-todo-btn ${completed === true ? 'btn-clicked' : ''}`} onClick={() => {setCompleted(true); showCompletedTodos()}}>Completed Todos</button>
         </div>
         <div className="display-todos">
           {completed ? showCompletedTodos() : handleShowTodos()}
-          {/* {handleShowTodos()} */}
         </div>
       </section>
     </div >
